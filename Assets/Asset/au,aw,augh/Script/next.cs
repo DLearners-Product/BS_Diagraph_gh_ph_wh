@@ -56,7 +56,7 @@ public class next : MonoBehaviour
         G_Selected.transform.GetChild(2).gameObject.SetActive(true);
         B_CanClick = true;
     }
-    // Update is called once per frame
+
     void THI_ShowQuestion()
     {
         for(int i=0;i<GA_Questions.Length;i++)
