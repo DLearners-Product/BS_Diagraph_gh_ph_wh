@@ -1,19 +1,10 @@
 fileFormatVersion: 2
-guid: 6c469472fa027654da9ccda99fcc56b4
+guid: 030329aa9ced67d4ba7e81420ce49b2c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4481524539535111530
-    second: T 6 panel wrong shape_0
-  - first:
-      213: 8108245054507696492
-    second: T 6 panel wrong shape_1
-  - first:
-      213: 4229440050445443693
-    second: T 6 panel wrong shape_2
-  - first:
-      213: -1463928250185023297
-    second: T 6 panel wrong shape_3
+      213: 5341452140957414072
+    second: 3 7_0
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -111,13 +102,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: T 6 panel wrong shape_0
+      name: 3 7_0
       rect:
         serializedVersion: 2
-        x: 47
-        y: 742
-        width: 244
-        height: 196
+        x: 44
+        y: 16
+        width: 412
+        height: 472
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -125,71 +116,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 69a40d8ec2d6ec1c0800000000000000
-      internalID: -4481524539535111530
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: T 6 panel wrong shape_1
-      rect:
-        serializedVersion: 2
-        x: 342
-        y: 694
-        width: 256
-        height: 243
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c61cfb1fae5468070800000000000000
-      internalID: 8108245054507696492
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: T 6 panel wrong shape_2
-      rect:
-        serializedVersion: 2
-        x: 648
-        y: 725
-        width: 289
-        height: 254
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d626c9d315df1ba30800000000000000
-      internalID: 4229440050445443693
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: T 6 panel wrong shape_3
-      rect:
-        serializedVersion: 2
-        x: 29
-        y: 446
-        width: 290
-        height: 205
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fb0001f33051fabe0800000000000000
-      internalID: -1463928250185023297
+      spriteID: 8b234860c66a02a40800000000000000
+      internalID: 5341452140957414072
       vertices: []
       indices: 
       edges: []
