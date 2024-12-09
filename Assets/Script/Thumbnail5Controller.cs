@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 
 public class Thumbnail5Controller : MonoBehaviour
@@ -35,7 +36,7 @@ public class Thumbnail5Controller : MonoBehaviour
     {
         int i=0;
         spawnChildIndex.Clear();
-        foreach (var optionItem in questionsArr[currentIndex].questionObjects)
+        foreach (var optionItem in currentQuestionObjs.questionObjects)
         {
             var questionObj = GetPuzzleObj(optionItem.isAnswer);
             Debug.Log($"Right Puzzle Length :: {puzzleObjs.Count} Wrong Puzzle Length :: {wrongPuzzleObjs.Count}");
@@ -140,6 +141,7 @@ public class Thumbnail5Controller : MonoBehaviour
     void InstantiatePuzzleQueue()
     {
         currentCrctAnsCount = GetCorrectAnsCount();
+        answerCount = 0;
         int unAnswerCount = puzzleParts.Length - currentCrctAnsCount;
         List<GameObject> _puzzleParts = new List<GameObject>(puzzleParts);
 
@@ -168,9 +170,14 @@ public class Thumbnail5Controller : MonoBehaviour
 
     void DeleteSpawnedPuzzleObjs()
     {
-        while (spawnParent.transform.childCount > 0)
+        int childCount = spawnParent.transform.childCount;
+        Debug.Log($"Child Count :: {childCount}");
+        for (int i = 0; i < childCount; i++)
         {
-            Destroy(spawnParent.transform.GetChild(0));
+            var delObj = spawnParent.transform.GetChild(0);
+            delObj.SetParent(null);
+            Destroy(delObj.gameObject);
+            Debug.Log($"Child Count :: {spawnParent.transform.childCount}");
         }
     }
 }
