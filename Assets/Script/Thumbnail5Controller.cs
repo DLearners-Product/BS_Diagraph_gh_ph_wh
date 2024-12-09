@@ -13,7 +13,11 @@ public class Thumbnail5Controller : MonoBehaviour
     public GameObject[] wrongPuzzleParts;
     public string[] questionText;
     public QuesObjArr[] questionsArr;
+    public AudioClip[] questionAudioClips;
     public TextMeshProUGUI questionDisplayText;
+    public AudioClip AC_rightAns;
+    public AudioClip AC_wrongAns;
+    public AudioSource AS_audioSource;
     int currentIndex = 0;
     int answerCount = 0;
     Queue<GameObject> puzzleObjs;
@@ -26,10 +30,13 @@ public class Thumbnail5Controller : MonoBehaviour
     List<int> excludeInt = new List<int>(){4,0,8};
     QuesObjArr currentQuestionObjs;
     int currentCrctAnsCount = 0;
+    AudioClip AC_currentQuesClip;
+    public GameObject activityCompleted;
 
     void Start()
     {
         ChangeQuestion();
+        PlayQuestionAudio();
     }
 
     void SpawnPuzzleObjects()
@@ -43,6 +50,8 @@ public class Thumbnail5Controller : MonoBehaviour
             var spawnedObj = Instantiate(questionObj, spawnParent.transform);
             spawnedObj.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = optionItem.questionText;
             var dragScript = spawnedObj.GetComponent<ImageDragandDrop>();
+            spawnedObj.AddComponent<AudioSource>();
+            spawnedObj.GetComponent<AudioSource>().clip = optionItem.optionAudioClip;
             spawnChildIndex.Add(spawnedObj.name, i++);
         }
     }
@@ -80,10 +89,15 @@ public class Thumbnail5Controller : MonoBehaviour
         // Debug.Log($"Dropped Game Object :: {dropObj.name} DropSlot :: {dropSlot.name}  {puzzleMathced}");
         if(puzzleMathced)
         {
+            var puzzleAudio = dropObj.GetComponent<AudioSource>().clip;
+            AS_audioSource.PlayOneShot(puzzleAudio);
             dropSlot.GetComponent<Image>().color = Color.white;
             dropSlot.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = dropObj.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text;
+            // Invoke(, AS_audioSource.clip.length);
             Destroy(dropObj);
             answerCount++;
+        }else{
+            AS_audioSource.PlayOneShot(AC_wrongAns);
         }
 
         // Debug.Log($"{answerCount} == {currentCrctAnsCount} {answerCount == currentCrctAnsCount}");
@@ -99,12 +113,19 @@ public class Thumbnail5Controller : MonoBehaviour
         ResetPuzzleComponent();
         InstantiatePuzzleQueue();
         questionDisplayText.text = questionText[currentIndex];
+        AC_currentQuesClip = questionAudioClips[currentIndex];
         SpawnPuzzleObjects();
         currentIndex++;
     }
 
     void NextQuestion()
     {
+        if(questionText.Length == (currentIndex + 1))
+        {
+            activityCompleted.SetActive(true);
+            return;
+        }
+
         StartCoroutine(TransitionOn());
         ChangeQuestion();
     }
@@ -117,6 +138,12 @@ public class Thumbnail5Controller : MonoBehaviour
         transitionAnimation.Play("ques_transition_out");
         yield return new WaitForSeconds(questionTranOut.length + 1f);
         transitionAnimation.gameObject.SetActive(false);
+        PlayQuestionAudio();
+    }
+
+    void PlayQuestionAudio()
+    {
+        AS_audioSource.PlayOneShot(AC_currentQuesClip);
     }
 
     GameObject GetPuzzleObj(bool isRight)
@@ -192,5 +219,6 @@ public class QuesObjArr
 public class QuestionObject
 {
     public string questionText;
+    public AudioClip optionAudioClip;
     public bool isAnswer;
 }
