@@ -102,8 +102,23 @@ public class Utilities : MonoGenericSingleton<Utilities>
     }
 
 
-    public void ANIM_RotateHide(Transform obj) => obj.DORotate(new Vector3(0, 90, 0), 0.35f);
-    public void ANIM_RotateShow(Transform obj) => obj.DORotate(new Vector3(0, 0, 0), 0.35f);
+    public void ANIM_RotateHide(Transform obj, TweenCallback callback = null)
+    {
+        var tween = obj.DORotate(new Vector3(0, 90, 0), 0.35f);
+        tween.onComplete += callback;
+    } 
+    public void ANIM_RotateShow(Transform obj, TweenCallback callback = null)
+    {
+        var _tween = obj.DORotate(new Vector3(0, 0, 0), 0.35f);
+        _tween.onComplete += callback;
+    }
+
+    public void ANIM_RotateObj(Transform obj, TweenCallback callback)
+    {
+        Sequence seq = DOTween.Sequence();
+        seq.Append(obj.DORotate(new Vector3(0, 90, 0), 0.35f));
+        seq.Append(obj.DORotate(new Vector3(0, 0, 0), 0.35f));
+    }
 
     public void ANIM_ShrinkObject(Transform obj)
     {
