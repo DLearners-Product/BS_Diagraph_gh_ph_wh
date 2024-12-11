@@ -10,7 +10,7 @@ public class passage : MonoBehaviour
     public int I_Qcount, I_Count;
     public GameObject G_final, G_Selected;
     public AudioSource AS_Correct, AS_Wrong, AS_Empty;
-    // Start is called before the first frame update
+
     void Start()
     {
         I_Qcount = 0;
@@ -27,6 +27,7 @@ public class passage : MonoBehaviour
         GA_Questions[I_Qcount].SetActive(true);
         
     }
+
     public void BUT_Next()
     {
         if (I_Qcount < GA_Questions.Length - 1)
@@ -39,6 +40,7 @@ public class passage : MonoBehaviour
             G_final.SetActive(true);
         }
     }
+
     public void BUT_Back()
     {
         if (I_Qcount >0)
@@ -51,23 +53,22 @@ public class passage : MonoBehaviour
             G_final.SetActive(true);
         }
     }
+
     public void BUT_Clicking()
     {
+        G_Selected = EventSystem.current.currentSelectedGameObject;
         
-            G_Selected = EventSystem.current.currentSelectedGameObject;
-            
-            if (G_Selected.tag=="answer")
-            {
-                AS_Correct.Play();
-                G_Selected.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.green;
-            }
-            else
-            {
-                G_Selected.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.red;
-                Invoke("THI_Off", 1f);
-                AS_Wrong.Play();
-            }
-        
+        if (G_Selected.tag=="answer")
+        {
+            AS_Correct.Play();
+            G_Selected.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.green;
+        }
+        else
+        {
+            G_Selected.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.red;
+            Invoke("THI_Off", 1f);
+            AS_Wrong.Play();
+        }
     }
 
     void THI_Off()

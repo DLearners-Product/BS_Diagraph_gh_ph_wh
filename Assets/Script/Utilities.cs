@@ -125,6 +125,16 @@ public class Utilities : MonoGenericSingleton<Utilities>
         obj.DOScale(Vector3.zero, 0.5f);
     }
 
+    public void ANIM_ShakeObj(Transform obj)
+    {
+        Sequence seq = DOTween.Sequence();
+        seq.Append(obj.DORotate(new Vector3(0, 0, 45), 0.35f));
+        seq.Append(obj.DORotate(new Vector3(0, 0, -45), 0.25f));
+        seq.Append(obj.DORotate(new Vector3(0, 0, 25), 0.15f));
+        seq.Append(obj.DORotate(new Vector3(0, 0, -25), 0.05f));
+        seq.Append(obj.DORotate(new Vector3(0, 0, 0), 0.05f));
+    }
+
     public void ANIM_FlyIn(Transform obj) => obj.DOMoveY(-1.6f, 2f).SetEase(Ease.OutCirc);
     // public void ANIM_FlyIn(Transform obj) => obj.DOMove(new Vector3(obj.transform.position.x, -1.6f, 0), 2f).SetEase(Ease.OutCirc);
 

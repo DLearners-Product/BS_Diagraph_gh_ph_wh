@@ -12,8 +12,9 @@ public class listenandclick : MonoBehaviour
     public AudioSource AS_Correct, AS_Wrong, AS_Empty;
     public AudioClip[] AC_Clips;
     public Text TXT_Max, TXT_Current;
+    public AnimationClip speakerClip;
     bool B_CanClick;
-    // Start is called before the first frame update
+
     void Start()
     {
         I_Qcount = 0;
@@ -22,6 +23,15 @@ public class listenandclick : MonoBehaviour
         TXT_Max.text = AC_Clips.Length.ToString();
         int x = I_Qcount + 1;
         TXT_Current.text = x.ToString();
+        SpawnOption();
+    }
+
+    void SpawnOption()
+    {
+        foreach (var option in GA_Options)
+        {
+            Utilities.Instance.ANIM_ShakeObj(option.transform);
+        }
     }
 
     void THI_Speaker()
@@ -36,9 +46,13 @@ public class listenandclick : MonoBehaviour
 
     public void BUT_Speaker()
     {
+        Debug.Log("Came to BUT_Speaker()");
+        var currentObjAnimator = EventSystem.current.currentSelectedGameObject.GetComponent<Animator>();
+        currentObjAnimator.Play("speaker_anim");
         AS_Empty.Play();
         B_CanClick = true;
     }
+
     public void BUT_Next()
     {
         if (I_Qcount < AC_Clips.Length - 1)
@@ -90,7 +104,7 @@ public class listenandclick : MonoBehaviour
             }
             if (G_Selected.name == "Opt2")
             {
-                if (I_Qcount == 1 || I_Qcount == 3 || I_Qcount == 6 || I_Qcount == 8)
+                if (I_Qcount == 1 || I_Qcount == 6 || I_Qcount == 8)
                 {
                     AS_Correct.Play();
                     G_Selected.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.green;
@@ -104,7 +118,7 @@ public class listenandclick : MonoBehaviour
             }
             if (G_Selected.name == "Opt3")
             {
-                if (I_Qcount == 4 || I_Qcount == 5)
+                if (I_Qcount == 3 || I_Qcount == 4 || I_Qcount == 5)
                 {
                     AS_Correct.Play();
                     G_Selected.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.green;
@@ -117,8 +131,6 @@ public class listenandclick : MonoBehaviour
                 }
             }
         }
-       
-
     }
 
     void THI_Off()
