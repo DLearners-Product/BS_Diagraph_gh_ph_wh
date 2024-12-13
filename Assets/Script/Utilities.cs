@@ -11,9 +11,9 @@ public class Utilities : MonoGenericSingleton<Utilities>
 
     public void ANIM_ShowNormal(Transform obj) => obj.DOScale(Vector3.one, 0.5f);
 
-    public void ScaleObject(Transform obj)
+    public void ScaleObject(Transform obj, float scaleSize=1.5f, float duration=0f)
     {
-        obj.DOScale(Vector3.one * 1.5f, 0f);
+        obj.DOScale(Vector3.one * scaleSize, duration);
     }
 
     public void ANIM_ShowBounceNormal(Transform obj)
@@ -133,6 +133,17 @@ public class Utilities : MonoGenericSingleton<Utilities>
         seq.Append(obj.DORotate(new Vector3(0, 0, 25), 0.15f));
         seq.Append(obj.DORotate(new Vector3(0, 0, -25), 0.05f));
         seq.Append(obj.DORotate(new Vector3(0, 0, 0), 0.05f));
+    }
+    
+    public void ApplyScaleEffectsToChildObjects(GameObject[] objs)
+    {
+        Sequence seq = DOTween.Sequence();
+        for (int i = 0; i < objs.Length; i++)
+        {
+            var _child = objs[i].transform;
+            seq.Append(_child.DOScale(Vector3.one * 1.25f, 0.25f));
+            seq.Append(_child.DOScale(Vector3.one, 0.25f));
+        }
     }
 
     public void ANIM_FlyIn(Transform obj) => obj.DOMoveY(-1.6f, 2f).SetEase(Ease.OutCirc);

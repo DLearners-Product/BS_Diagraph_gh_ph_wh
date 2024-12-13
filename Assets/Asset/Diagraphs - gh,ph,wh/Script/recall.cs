@@ -48,7 +48,6 @@ public class recall : MonoBehaviour
 
         if(_movementdir == QuestionChangeOrder.Next)
         {
-            Debug.Log("CAme here....");
             spawnedPic.transform.position = _spawnPoint.transform.position;
             Utilities.Instance.ANIM_MoveWithScaleUp(_currentSpawnQues.transform, _standPoint.transform.position);
             if(_prevSpawnQues != null)
@@ -56,7 +55,6 @@ public class recall : MonoBehaviour
                 Utilities.Instance.ANIM_MoveWithScaleDown(_prevSpawnQues.transform, _endPoint.transform.position, DeleteCompletedObj);
             }
         }else{
-            Debug.Log("CAme here....111");
             spawnedPic.transform.position = _endPoint.transform.position;
 
             Utilities.Instance.ANIM_MoveWithScaleUp(_currentSpawnQues.transform, _standPoint.transform.position);

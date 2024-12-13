@@ -633,7 +633,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 1509251462971098590}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -1458,6 +1458,7 @@ MonoBehaviour:
   I_Qcount: 0
   G_final: {fileID: 3117300784694776830}
   G_Selected: {fileID: 0}
+  ANIMT_speaker: {fileID: 638128371}
   AS_Correct: {fileID: 1963121163824639835}
   AS_Wrong: {fileID: 1963121163508783348}
   AS_Empty: {fileID: 1963121165117080744}
@@ -2647,7 +2648,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -74, y: -119}
+  m_AnchoredPosition: {x: -5, y: -34}
   m_SizeDelta: {x: 204.46924, y: 164.89508}
   m_Pivot: {x: 1, y: 1}
 --- !u!222 &6319486814258834846

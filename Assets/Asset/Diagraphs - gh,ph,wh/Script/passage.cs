@@ -10,6 +10,7 @@ public class passage : MonoBehaviour
     public int I_Qcount, I_Count;
     public GameObject G_final, G_Selected;
     public AudioSource AS_Correct, AS_Wrong, AS_Empty;
+    public AudioSource AS_header, AS_passage;
 
     void Start()
     {
@@ -28,8 +29,22 @@ public class passage : MonoBehaviour
         
     }
 
+    public void ReadPassage()
+    {
+        StartCoroutine(WaitAndPlayPassageAudio());
+    }
+
+    IEnumerator WaitAndPlayPassageAudio()
+    {
+        AS_header.Play();
+        // WaitAndPlayPassageAudio(AS_header.clip.length);
+        yield return new WaitForSeconds(AS_header.clip.length);
+        AS_passage.Play();
+    }
+
     public void BUT_Next()
     {
+        StopPassageVO();
         if (I_Qcount < GA_Questions.Length - 1)
         {
             I_Qcount++;
@@ -43,6 +58,7 @@ public class passage : MonoBehaviour
 
     public void BUT_Back()
     {
+        StopPassageVO();
         if (I_Qcount >0)
         {
             I_Qcount--;
@@ -60,20 +76,44 @@ public class passage : MonoBehaviour
         
         if (G_Selected.tag=="answer")
         {
-            AS_Correct.Play();
-            G_Selected.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.green;
+            // AS_Correct.Play();
+            // Invoke(nameof(PlayRightAudio), G_Selected.GetComponent<AudioSource>().clip.length);
+            StartCoroutine(PlayRightAudio(G_Selected));
+            G_Selected.GetComponent<AudioSource>().Play();
         }
         else
         {
-            G_Selected.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.red;
-            Invoke("THI_Off", 1f);
-            AS_Wrong.Play();
+            // Invoke(nameof(PlayWrongAudio), G_Selected.GetComponent<AudioSource>().clip.length);
+            StartCoroutine(PlayWrongAudio(G_Selected));
+            G_Selected.GetComponent<AudioSource>().Play();
+            // AS_Wrong.Play();
         }
     }
 
-    void THI_Off()
+    void StopPassageVO()
     {
-        
-        G_Selected.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.gray;
+        AS_header.Stop();
+        AS_passage.Stop();
+    }
+
+    IEnumerator PlayRightAudio(GameObject selectedObj)
+    {
+        yield return new WaitForSeconds(selectedObj.GetComponent<AudioSource>().clip.length);
+        AS_Correct.Play();
+        selectedObj.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.green;
+    }
+
+    IEnumerator PlayWrongAudio(GameObject selectedObj)
+    {
+        yield return new WaitForSeconds(selectedObj.GetComponent<AudioSource>().clip.length);
+        AS_Wrong.Play();
+        selectedObj.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.red;
+        yield return new WaitForSeconds(1f);
+        THI_Off(selectedObj);
+    }
+
+    void THI_Off(GameObject selectedObj)
+    {
+        selectedObj.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.gray;
     }
 }

@@ -9,6 +9,7 @@ public class listenandclick : MonoBehaviour
     public GameObject[] GA_Options;
     public int I_Qcount;
     public GameObject G_final, G_Selected;
+    public Animator ANIMT_speaker;
     public AudioSource AS_Correct, AS_Wrong, AS_Empty;
     public AudioClip[] AC_Clips;
     public Text TXT_Max, TXT_Current;
@@ -28,15 +29,15 @@ public class listenandclick : MonoBehaviour
 
     void SpawnOption()
     {
-        foreach (var option in GA_Options)
-        {
-            Utilities.Instance.ANIM_ShakeObj(option.transform);
-        }
+        Utilities.Instance.ApplyScaleEffectsToChildObjects(GA_Options);
     }
 
     void THI_Speaker()
     {
         AS_Empty.clip = AC_Clips[I_Qcount];
+        AS_Empty.Play();
+        ANIMT_speaker.Play("speaker_anim");
+
         for(int i=0;i<GA_Options.Length;i++)
         {
             GA_Options[i].transform.GetChild(0).GetComponent<Image>().color = Color.gray;
@@ -47,8 +48,8 @@ public class listenandclick : MonoBehaviour
     public void BUT_Speaker()
     {
         Debug.Log("Came to BUT_Speaker()");
-        var currentObjAnimator = EventSystem.current.currentSelectedGameObject.GetComponent<Animator>();
-        currentObjAnimator.Play("speaker_anim");
+        // var currentObjAnimator = EventSystem.current.currentSelectedGameObject.GetComponent<Animator>();
+        ANIMT_speaker.Play("speaker_anim");
         AS_Empty.Play();
         B_CanClick = true;
     }
@@ -57,8 +58,9 @@ public class listenandclick : MonoBehaviour
     {
         if (I_Qcount < AC_Clips.Length - 1)
         {
+            SpawnOption();
             I_Qcount++;
-            THI_Speaker();
+            Invoke(nameof(THI_Speaker), 1.5f);
             int x = I_Qcount + 1;
             TXT_Current.text = x.ToString();
         }
@@ -83,8 +85,8 @@ public class listenandclick : MonoBehaviour
     }
     public void BUT_Clicking()
     {
-        if(B_CanClick)
-        {
+        // if(B_CanClick)
+        // {
             G_Selected = EventSystem.current.currentSelectedGameObject;
             B_CanClick = false;
             // Debug.Log(G_Selected.name);
@@ -93,7 +95,9 @@ public class listenandclick : MonoBehaviour
                 if (I_Qcount == 0 || I_Qcount == 2 || I_Qcount == 7 || I_Qcount == 9)
                 {
                     AS_Correct.Play();
-                    G_Selected.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.green;
+                    Utilities.Instance.ScaleObject(G_Selected.transform, 1.15f, 0.5f);
+                    Invoke(nameof(BUT_Next), 1f);
+                    // G_Selected.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.green;
                 }
                 else
                 {
@@ -107,7 +111,9 @@ public class listenandclick : MonoBehaviour
                 if (I_Qcount == 1 || I_Qcount == 6 || I_Qcount == 8)
                 {
                     AS_Correct.Play();
-                    G_Selected.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.green;
+                    Utilities.Instance.ScaleObject(G_Selected.transform, 1.15f, 0.5f);
+                    Invoke(nameof(BUT_Next), 1f);
+                    // G_Selected.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.green;
                 }
                 else
                 {
@@ -121,7 +127,9 @@ public class listenandclick : MonoBehaviour
                 if (I_Qcount == 3 || I_Qcount == 4 || I_Qcount == 5)
                 {
                     AS_Correct.Play();
-                    G_Selected.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.green;
+                    Utilities.Instance.ScaleObject(G_Selected.transform, 1.15f, 0.5f);
+                    Invoke(nameof(BUT_Next), 1f);
+                    // G_Selected.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.green;
                 }
                 else
                 {
@@ -130,11 +138,12 @@ public class listenandclick : MonoBehaviour
                     Invoke("THI_Off", 1f);
                 }
             }
-        }
+        // }
     }
 
     void THI_Off()
     {
+        Debug.Log("Came to THI_Off...");
         B_CanClick = true;
         G_Selected.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.gray;
     }

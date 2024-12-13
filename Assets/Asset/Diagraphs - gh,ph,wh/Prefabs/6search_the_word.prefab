@@ -119,6 +119,7 @@ MonoBehaviour:
       isCorrect: 0
   activityCompleted: {fileID: 142068789338109829}
   audioSource: {fileID: 1199834750386761786}
+  wrongAnsClip: {fileID: 8300000, guid: a27d0ce42ffa8b740ae1b39a5f043dd5, type: 3}
 --- !u!1 &1199834750267820011
 GameObject:
   m_ObjectHideFlags: 0

@@ -86,10 +86,12 @@ public class Thumbnail5Controller : MonoBehaviour
     void OnComponentDrop(GameObject dropObj, GameObject dropSlot)
     {
         bool puzzleMathced = dropObj.name.Replace("(Clone)", "").Trim() == dropSlot.name.Trim();
+        float clipLen = 0f;
         // Debug.Log($"Dropped Game Object :: {dropObj.name} DropSlot :: {dropSlot.name}  {puzzleMathced}");
         if(puzzleMathced)
         {
             var puzzleAudio = dropObj.GetComponent<AudioSource>().clip;
+            clipLen = puzzleAudio.length;
             AS_audioSource.PlayOneShot(puzzleAudio);
             dropSlot.GetComponent<Image>().color = Color.white;
             dropSlot.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = dropObj.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text;
@@ -97,13 +99,14 @@ public class Thumbnail5Controller : MonoBehaviour
             Destroy(dropObj);
             answerCount++;
         }else{
+            clipLen = AC_wrongAns.length;
             AS_audioSource.PlayOneShot(AC_wrongAns);
         }
 
         // Debug.Log($"{answerCount} == {currentCrctAnsCount} {answerCount == currentCrctAnsCount}");
         if(answerCount == currentCrctAnsCount)
         {
-            NextQuestion();
+            Invoke(nameof(NextQuestion), clipLen + 1f);
         }
     }
 

@@ -14,6 +14,7 @@ public class Thumbnail6Controller : MonoBehaviour
     public QuestionOptions[] questions;
     public GameObject activityCompleted;
     public AudioSource audioSource;
+    public AudioClip wrongAnsClip;
     int currentIndex = 0;
     QuestionOptions currentQuesOpt;
 
@@ -59,6 +60,7 @@ public class Thumbnail6Controller : MonoBehaviour
             Debug.Log("Right Options....");
             Invoke(nameof(ChangeQues), rightOption.optionClip.length + 1);
         }else{
+            audioSource.PlayOneShot(wrongAnsClip);
             Debug.Log("Wrong Options....");
         }
     }

@@ -801,16 +801,14 @@ public class Main_Blended : MonoBehaviour
         B_pause = true;
         ImmersiveObjects = new GameObject[0];
         G_worksheet.transform.GetChild(0).gameObject.SetActive(false);
-        //  Debug.Log("zzzzzzz111111==="+ImmersiveObjects.Length);
         if (G_currenlevel != null)
         {
             Destroy(G_currenlevel);
         }
-        var currentLevel = Instantiate(GA_levelsIG[levelno]);
+        var currentLevel = Instantiate(MainBlendedData.instance.slideDatas[levelno].slideObject);
         currentLevel.transform.SetParent(GameObject.Find("Game_Panel").transform, false);
         currentLevel.transform.SetAsFirstSibling();
         G_currenlevel = currentLevel;
-        // Debug.Log("zzzzzzz222222 :" + ImmersiveObjects.Length);
         //NEW IMMERSIVE READING
         if (currentLevel.GetComponent<Image>() != null)
         {
