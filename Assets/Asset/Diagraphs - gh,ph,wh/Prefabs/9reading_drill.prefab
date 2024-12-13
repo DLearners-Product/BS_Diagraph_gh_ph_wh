@@ -36,8 +36,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -358.8, y: 42.600006}
-  m_SizeDelta: {x: -776.3795, y: -428.03687}
+  m_AnchoredPosition: {x: -358.79993, y: 26.900024}
+  m_SizeDelta: {x: -776.3795, y: -396.6776}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4266526988982242901
 CanvasRenderer:
@@ -412,7 +412,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 1.2000122, y: -2.5}
+  m_AnchoredPosition: {x: 1.1999512, y: -2.5}
   m_SizeDelta: {x: -37.634033, y: -40.14276}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4266526990083729585
@@ -528,7 +528,7 @@ GameObject:
   - component: {fileID: 4266526990480612754}
   - component: {fileID: 4266526990480612752}
   m_Layer: 5
-  m_Name: 10reading_drill
+  m_Name: 9reading_drill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

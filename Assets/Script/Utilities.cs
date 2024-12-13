@@ -146,6 +146,19 @@ public class Utilities : MonoGenericSingleton<Utilities>
         }
     }
 
+    public void ANIM_MoveUpDown(Transform obj, Vector3 endPosition, TweenCallback callback=null)
+    {
+        Vector3 startPosition = obj.position;
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(obj.DOMove(endPosition, 1f));
+        // foreach (var func in callback)
+        // {
+        sequence.AppendCallback(callback);
+        // }
+        sequence.Append(obj.DOMove(startPosition, 1f));
+        sequence.Play();
+    }
+
     public void ANIM_FlyIn(Transform obj) => obj.DOMoveY(-1.6f, 2f).SetEase(Ease.OutCirc);
     // public void ANIM_FlyIn(Transform obj) => obj.DOMove(new Vector3(obj.transform.position.x, -1.6f, 0), 2f).SetEase(Ease.OutCirc);
 

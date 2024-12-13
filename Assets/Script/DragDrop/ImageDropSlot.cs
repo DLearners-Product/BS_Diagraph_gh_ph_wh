@@ -5,11 +5,14 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 
-public class ImageDropSlot: MonoBehaviour, IDropHandler, IPointerEnterHandler
+public class ImageDropSlot: MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
 {
     ImageDragandDrop dragitem;
     public delegate void OnDropInSlotDelegate(GameObject dropedObject, GameObject dropSlotObj);
+    public delegate void MouseEvent(GameObject dragObject, GameObject hoverObject);
     public static OnDropInSlotDelegate onDropInSlot;
+    public static MouseEvent onMouseHoverEnter;
+    public static MouseEvent onMouseHoverExit;
 
     public void OnDrop(PointerEventData eventData)
     {
@@ -30,7 +33,12 @@ public class ImageDropSlot: MonoBehaviour, IDropHandler, IPointerEnterHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // Debug.Log($"POINTER ENTERED FOR {gameObject.name}");
+        onMouseHoverEnter?.Invoke(eventData.pointerDrag, gameObject);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        onMouseHoverExit?.Invoke(eventData.pointerDrag, gameObject);
     }
 }
 

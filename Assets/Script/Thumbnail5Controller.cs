@@ -61,6 +61,8 @@ public class Thumbnail5Controller : MonoBehaviour
         ImageDragandDrop.onDragStart += OnDragStart;
         ImageDragandDrop.onDragEnd += OnDragEnd;
         ImageDropSlot.onDropInSlot += OnComponentDrop;
+        ImageDropSlot.onMouseHoverEnter += OnMousePointerHover;
+        ImageDropSlot.onMouseHoverExit += OnMousePointerExit;
     }
 
     private void OnDisable()
@@ -68,6 +70,26 @@ public class Thumbnail5Controller : MonoBehaviour
         ImageDragandDrop.onDragStart -= OnDragStart;
         ImageDragandDrop.onDragEnd -= OnDragEnd;
         ImageDropSlot.onDropInSlot -= OnComponentDrop;
+        ImageDropSlot.onMouseHoverEnter -= OnMousePointerHover;
+        ImageDropSlot.onMouseHoverExit -= OnMousePointerExit;
+    }
+
+    void OnMousePointerHover(GameObject pointerHoldObject, GameObject hoverOnObject)
+    {
+        if(pointerHoldObject != null && hoverOnObject.GetComponent<Image>().color.a != 1)
+        {
+            hoverOnObject.GetComponent<Image>().enabled = false;
+            hoverOnObject.transform.GetChild(1).gameObject.SetActive(true);
+        }
+    }
+
+    void OnMousePointerExit(GameObject pointerHoldObject, GameObject hoverOnObject)
+    {
+        if(pointerHoldObject != null)
+        {
+            hoverOnObject.GetComponent<Image>().enabled = true;
+            hoverOnObject.transform.GetChild(1).gameObject.SetActive(false);
+        }
     }
 
     void OnDragStart(GameObject draggedObj)
@@ -88,6 +110,8 @@ public class Thumbnail5Controller : MonoBehaviour
         bool puzzleMathced = dropObj.name.Replace("(Clone)", "").Trim() == dropSlot.name.Trim();
         float clipLen = 0f;
         // Debug.Log($"Dropped Game Object :: {dropObj.name} DropSlot :: {dropSlot.name}  {puzzleMathced}");
+        dropSlot.GetComponent<Image>().enabled = true;
+        dropSlot.transform.GetChild(1).gameObject.SetActive(false);
         if(puzzleMathced)
         {
             var puzzleAudio = dropObj.GetComponent<AudioSource>().clip;

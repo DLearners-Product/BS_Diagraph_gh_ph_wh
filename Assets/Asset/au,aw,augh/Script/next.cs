@@ -3,21 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class next : MonoBehaviour
 {
     public GameObject[] GA_Questions, G_Examples;
     public int I_Qcount;
+    public Transform postionTransform;
+    public AudioSource emptyAudioSource;
+    public GameObject seaWave;
+    public GameObject[] diagraphsObjects;
+    public GameObject[] digraphAnswers;
+    public AudioClip[] questionClip;
+    public AudioClip[] answerClip;
     public GameObject G_Final;
     GameObject G_Selected;
     bool B_CanClick;
+    GameObject currentEnabledObj = null;
+    int currentDiagINDX = 0;
     // Start is called before the first frame update
     void Start()
     {
         I_Qcount = 0;
+        currentDiagINDX = 0;
         THI_ShowQuestion();
         G_Final.SetActive(false);
         THI_Off();
+        currentEnabledObj = diagraphsObjects[currentDiagINDX];
     }
 
     public void BUT_Speaker()
@@ -120,5 +132,40 @@ public class next : MonoBehaviour
         {
             G_Final.SetActive(true);
         }
+    }
+
+    public void OnShellClicked()
+    {
+        var clickedObj = EventSystem.current.currentSelectedGameObject;
+        string selectedSTR = clickedObj.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text;
+        var  digraphIndx = GetDigraphObjectIndex(selectedSTR);
+
+        Utilities.Instance.ANIM_MoveUpDown(seaWave.transform, postionTransform.position, () => {EnableNextDigraph(digraphIndx);});
+    }
+
+    public void EnableNextDigraph(int enableIndex)
+    {
+        currentEnabledObj.SetActive(false);
+        currentDiagINDX = enableIndex;
+        emptyAudioSource.PlayOneShot(questionClip[currentDiagINDX]);
+        Invoke(nameof(PlayAnswer), questionClip[currentDiagINDX].length);
+        currentEnabledObj = diagraphsObjects[enableIndex];
+        currentEnabledObj.SetActive(true);
+    }
+
+    void PlayAnswer()
+    {
+        digraphAnswers[currentDiagINDX].SetActive(true);
+        emptyAudioSource.PlayOneShot(answerClip[currentDiagINDX]);
+    }
+
+    int GetDigraphObjectIndex(string diagraphSTR)
+    {
+        for (int i = 0; i < diagraphsObjects.Length; i++)
+        {
+            if(diagraphsObjects[i].name.Trim() == diagraphSTR.Trim())
+                return i;
+        }
+        return -1;
     }
 }
