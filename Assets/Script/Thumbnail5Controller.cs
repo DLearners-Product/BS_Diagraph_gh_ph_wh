@@ -168,7 +168,7 @@ public class Thumbnail5Controller : MonoBehaviour
         PlayQuestionAudio();
     }
 
-    void PlayQuestionAudio()
+    public void PlayQuestionAudio()
     {
         AS_audioSource.PlayOneShot(AC_currentQuesClip);
     }
