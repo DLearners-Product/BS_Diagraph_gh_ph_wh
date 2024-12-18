@@ -75,6 +75,7 @@ public class Utilities : MonoGenericSingleton<Utilities>
     }
 
     public void ANIM_CorrectScaleEffect(Transform obj) => StartCoroutine(IENUM_Hearbeat(obj));
+
     IEnumerator IENUM_Hearbeat(Transform obj)
     {
         for (int i = 0; i < 3; i++)
@@ -86,8 +87,8 @@ public class Utilities : MonoGenericSingleton<Utilities>
         }
     }
 
-
     public void ANIM_WrongShakeEffect(Transform obj) => StartCoroutine(IENUM_HeadShake(obj));
+
     IEnumerator IENUM_HeadShake(Transform obj)
     {
         obj.GetComponent<Button>().interactable = false;
@@ -101,12 +102,12 @@ public class Utilities : MonoGenericSingleton<Utilities>
         obj.GetComponent<Button>().interactable = true;
     }
 
-
     public void ANIM_RotateHide(Transform obj, TweenCallback callback = null)
     {
         var tween = obj.DORotate(new Vector3(0, 90, 0), 0.35f);
         tween.onComplete += callback;
-    } 
+    }
+
     public void ANIM_RotateShow(Transform obj, TweenCallback callback = null)
     {
         var _tween = obj.DORotate(new Vector3(0, 0, 0), 0.35f);
@@ -120,9 +121,9 @@ public class Utilities : MonoGenericSingleton<Utilities>
         seq.Append(obj.DORotate(new Vector3(0, 0, 0), 0.35f));
     }
 
-    public void ANIM_ShrinkObject(Transform obj)
+    public void ANIM_ShrinkObject(Transform obj, float actionTime=0.5f)
     {
-        obj.DOScale(Vector3.zero, 0.5f);
+        obj.DOScale(Vector3.zero, actionTime);
     }
 
     public void ANIM_ShakeObj(Transform obj)
@@ -135,14 +136,14 @@ public class Utilities : MonoGenericSingleton<Utilities>
         seq.Append(obj.DORotate(new Vector3(0, 0, 0), 0.05f));
     }
     
-    public void ApplyScaleEffectsToChildObjects(GameObject[] objs)
+    public void ApplyScaleEffectsToChildObjects(GameObject[] objs, TweenCallback<GameObject> callback=null)
     {
         Sequence seq = DOTween.Sequence();
         for (int i = 0; i < objs.Length; i++)
         {
             var _child = objs[i].transform;
-            seq.Append(_child.DOScale(Vector3.one * 1.25f, 0.25f));
-            seq.Append(_child.DOScale(Vector3.one, 0.25f));
+            seq.Append(_child.DOScale(Vector3.one * 1.25f, 0.15f));
+            seq.Append(_child.DOScale(Vector3.one, 0.15f));
         }
     }
 

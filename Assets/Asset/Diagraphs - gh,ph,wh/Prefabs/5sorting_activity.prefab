@@ -114753,9 +114753,9 @@ MonoBehaviour:
     - questionText: whale
       optionAudioClip: {fileID: 8300000, guid: 7e71bdc252baf4149813f7d05754bec8, type: 3}
       isAnswer: 0
-    - questionText: tight
-      optionAudioClip: {fileID: 8300000, guid: c1b8aac17e24bcb4b9d7af9de9c72d41, type: 3}
-      isAnswer: 0
+    - questionText: laugh
+      optionAudioClip: {fileID: 8300000, guid: e8ddb317a1d769e4e92e3e5a43a646b1, type: 3}
+      isAnswer: 1
     - questionText: height
       optionAudioClip: {fileID: 8300000, guid: c1c9aca9ff06018499cca176364c2716, type: 3}
       isAnswer: 0
@@ -114899,7 +114899,7 @@ MonoBehaviour:
   AS_audioSource: {fileID: 7201165095672386154}
   dragObjParent: {fileID: 7201165095932578528}
   transitionAnimation: {fileID: 7201165096326766050}
-  questionTranOut: {fileID: 7400000, guid: 8fac0c3f1b56d024aa60c9783b5a8945, type: 2}
+  questionTranOut: {fileID: 7400000, guid: 5277d5372a02f294db46b38e371cb07b, type: 2}
   questionTranIn: {fileID: 7400000, guid: 7f25ee649e77f5b479d51864f363f006, type: 2}
   activityCompleted: {fileID: 8264593597718320459}
 --- !u!1 &7201165095411247296
