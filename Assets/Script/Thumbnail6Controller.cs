@@ -15,6 +15,7 @@ public class Thumbnail6Controller : MonoBehaviour
     public GameObject activityCompleted;
     public AudioSource audioSource;
     public AudioClip wrongAnsClip;
+    public TextMeshProUGUI counterText;
     int currentIndex = 0;
     QuestionOptions currentQuesOpt;
 
@@ -27,6 +28,12 @@ public class Thumbnail6Controller : MonoBehaviour
     {
         if(currentIndex == questions.Length) activityCompleted.SetActive(true);
         Utilities.Instance.ANIM_RotateHide(questionImage.transform.parent, ChangeSpriteAndRotate);
+        UpdateCounterText();
+    }
+
+    void UpdateCounterText()
+    {
+        counterText.text = $"{currentIndex + 1} / {questions.Length}";
     }
 
     void ChangeSpriteAndRotate()
@@ -57,11 +64,9 @@ public class Thumbnail6Controller : MonoBehaviour
         if(rightOption != null && selectedOptSTR == rightOption.option)
         {
             audioSource.PlayOneShot(rightOption.optionClip);
-            Debug.Log("Right Options....");
             Invoke(nameof(ChangeQues), rightOption.optionClip.length + 1);
         }else{
             audioSource.PlayOneShot(wrongAnsClip);
-            Debug.Log("Wrong Options....");
         }
     }
 

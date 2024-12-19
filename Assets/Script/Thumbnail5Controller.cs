@@ -147,7 +147,7 @@ public class Thumbnail5Controller : MonoBehaviour
 
     void NextQuestion()
     {
-        if(questionText.Length == (currentIndex + 1))
+        if(questionText.Length < (currentIndex + 1))
         {
             activityCompleted.SetActive(true);
             return;
