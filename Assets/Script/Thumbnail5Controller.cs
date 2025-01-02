@@ -147,14 +147,13 @@ public class Thumbnail5Controller : MonoBehaviour
 
     void NextQuestion()
     {
-        if(questionText.Length == (currentIndex + 1))
+        if(questionText.Length < (currentIndex + 1))
         {
             activityCompleted.SetActive(true);
             return;
         }
 
         StartCoroutine(TransitionOn());
-        ChangeQuestion();
     }
 
     IEnumerator TransitionOn()
@@ -162,6 +161,7 @@ public class Thumbnail5Controller : MonoBehaviour
         transitionAnimation.gameObject.SetActive(true);
         transitionAnimation.Play("ques_transition_in");
         yield return new WaitForSeconds(questionTranIn.length + 1f);
+        ChangeQuestion();
         transitionAnimation.Play("ques_transition_out");
         yield return new WaitForSeconds(questionTranOut.length + 1f);
         transitionAnimation.gameObject.SetActive(false);

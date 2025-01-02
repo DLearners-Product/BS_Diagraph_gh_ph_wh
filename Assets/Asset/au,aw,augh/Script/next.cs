@@ -41,7 +41,7 @@ public class next : MonoBehaviour
             var clip = EventSystem.current.currentSelectedGameObject.GetComponent<AudioSource>().clip;
             B_CanClick = false;
             Invoke("THI_ShowFishes", clip.length);
-            if(I_Qcount==2)
+            if(I_Qcount==3)
             {
                 Invoke("THI_Ph", clip.length);
             }

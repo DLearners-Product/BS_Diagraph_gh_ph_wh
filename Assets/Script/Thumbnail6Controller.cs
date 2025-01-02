@@ -14,9 +14,12 @@ public class Thumbnail6Controller : MonoBehaviour
     public QuestionOptions[] questions;
     public GameObject activityCompleted;
     public AudioSource audioSource;
+    public AudioClip rightAnsClip;
     public AudioClip wrongAnsClip;
+    public TextMeshProUGUI counterText;
     int currentIndex = 0;
     QuestionOptions currentQuesOpt;
+    bool B_interactable = true;
 
     void Start()
     {
@@ -25,8 +28,14 @@ public class Thumbnail6Controller : MonoBehaviour
 
     void ChangeQues()
     {
-        if(currentIndex == questions.Length) activityCompleted.SetActive(true);
+        if(currentIndex == questions.Length) { activityCompleted.SetActive(true); return; }
         Utilities.Instance.ANIM_RotateHide(questionImage.transform.parent, ChangeSpriteAndRotate);
+        UpdateCounterText();
+    }
+
+    void UpdateCounterText()
+    {
+        counterText.text = $"{currentIndex + 1} / {questions.Length}";
     }
 
     void ChangeSpriteAndRotate()
@@ -40,6 +49,7 @@ public class Thumbnail6Controller : MonoBehaviour
     void AssignTextQuesOpt()
     {
         audioSource.PlayOneShot(currentQuesOpt.questionClip);
+        Invoke(nameof(EnableInteraction), currentQuesOpt.questionClip.length);
         questionText.text = currentQuesOpt.question;
         option1Text.text = currentQuesOpt.options[0].option;
         option2Text.text = currentQuesOpt.options[1].option;
@@ -52,17 +62,25 @@ public class Thumbnail6Controller : MonoBehaviour
 
     public void OptionBtnClicked(GameObject clickedBtn)
     {
+        if(!B_interactable) return;
+
         string selectedOptSTR = clickedBtn.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text;
         var rightOption = GetRightOption();
         if(rightOption != null && selectedOptSTR == rightOption.option)
         {
-            audioSource.PlayOneShot(rightOption.optionClip);
-            Debug.Log("Right Options....");
-            Invoke(nameof(ChangeQues), rightOption.optionClip.length + 1);
+            DisableInteraction();
+            StartCoroutine(PlayAnswerClipAndChangeQues(rightOption));
         }else{
             audioSource.PlayOneShot(wrongAnsClip);
-            Debug.Log("Wrong Options....");
         }
+    }
+
+    IEnumerator PlayAnswerClipAndChangeQues(TextOption rightOption)
+    {
+        audioSource.PlayOneShot(rightAnsClip);
+        yield return new WaitForSeconds(rightAnsClip.length);
+        audioSource.PlayOneShot(rightOption.optionClip);
+        Invoke(nameof(ChangeQues), rightOption.optionClip.length + 1);
     }
 
     TextOption GetRightOption()
@@ -74,6 +92,9 @@ public class Thumbnail6Controller : MonoBehaviour
         }
         return null;
     }
+
+    void EnableInteraction() => B_interactable = true;
+    void DisableInteraction() => B_interactable = false;
 }
 
 [System.Serializable]

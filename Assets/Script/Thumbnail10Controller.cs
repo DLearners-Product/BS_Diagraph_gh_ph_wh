@@ -5,7 +5,8 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
+// using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class Thumbnail10Controller : MonoBehaviour, IPointerClickHandler
 {
@@ -14,10 +15,32 @@ public class Thumbnail10Controller : MonoBehaviour, IPointerClickHandler
     public TextMeshProUGUI passageTMPPro;
     string[] answerContainStrings = {"gh", "ph", "wh"};
     public AudioClip[] rightAnswerClips;
+    public GameObject nextBtn;
+    public GameObject finalScreen;
+    public Animator storyAnimator;
+    int totalyAnswered = 0;
+    int allCrctAnsCount = 0;
+    List<int> answeredIndexes = new List<int>();
 
     void Start()
     {
-        
+        nextBtn.GetComponent<Button>().interactable = false;
+        allCrctAnsCount = GetAllCrctAns();
+    }
+
+    int GetAllCrctAns()
+    {
+        int crctAns = 0;
+        string passageText = passageTMPPro.text;
+        string[] passageTextArr = passageText.Split(' ');
+        for (int i = 0; i < passageTextArr.Length; i++)
+        {
+            if(EvaluateAnswer(passageTextArr[i]))
+            {
+                crctAns++;
+            }
+        }
+        return crctAns;
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -32,13 +55,23 @@ public class Thumbnail10Controller : MonoBehaviour, IPointerClickHandler
                 var clickedWord = tmPRO.textInfo.wordInfo[wordIndex].GetWord();
                 if(EvaluateAnswer(clickedWord))
                 {
+                    if(!answeredIndexes.Contains(wordIndex))
+                    {
+                        ++totalyAnswered;
+                        answeredIndexes.Add(wordIndex);
+                    }
+
                     passageTMPPro.text = HighLightAnswer(tmPRO.text, wordIndex);
                     AS_emptyAudioSource.PlayOneShot(GetAudioClip(clickedWord));
                     Debug.Log("Clicked right word " + clickedWord);
                 }else{
                     Debug.Log("Clicked wrong word " + clickedWord);
                 }
+            }
 
+            if(totalyAnswered == allCrctAnsCount) {
+                Debug.Log("BUTTON ACTTIVATED.......");
+                nextBtn.GetComponent<Button>().interactable = true;
             }
         }
     }
@@ -76,5 +109,11 @@ public class Thumbnail10Controller : MonoBehaviour, IPointerClickHandler
             passStrArr[ansIndex] = $"<color=yellow>{passStrArr[ansIndex]}</color>";
 
         return String.Join(" ", passStrArr);
+    }
+
+    public void ActivityCompleted()
+    {
+        finalScreen.SetActive(true);
+        storyAnimator.Play("New State");
     }
 }

@@ -1,11 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class recall : MonoBehaviour
 {
     public Sprite[] SPR_Pics;
+    public string[] STA_picName;
+    public AudioClip[] AC_picAudioClip;
     public Image IMG_Main;
     public Text TXT_Max, TXT_Current;
     public int I_Qcount;
@@ -15,6 +18,7 @@ public class recall : MonoBehaviour
     public Transform _endPoint;
     public GameObject prefabObj;
     public Transform spawnParent;
+    public GameObject TMP_displayObjName;
     List<GameObject> _spawnedObjects = new List<GameObject>();
     GameObject _currentSpawnQues,
                 _prevSpawnQues;
@@ -49,7 +53,7 @@ public class recall : MonoBehaviour
         if(_movementdir == QuestionChangeOrder.Next)
         {
             spawnedPic.transform.position = _spawnPoint.transform.position;
-            Utilities.Instance.ANIM_MoveWithScaleUp(_currentSpawnQues.transform, _standPoint.transform.position);
+            Utilities.Instance.ANIM_MoveWithScaleUp(_currentSpawnQues.transform, _standPoint.transform.position, AssignDisplayTextAudio);
             if(_prevSpawnQues != null)
             {
                 Utilities.Instance.ANIM_MoveWithScaleDown(_prevSpawnQues.transform, _endPoint.transform.position, DeleteCompletedObj);
@@ -57,7 +61,7 @@ public class recall : MonoBehaviour
         }else{
             spawnedPic.transform.position = _endPoint.transform.position;
 
-            Utilities.Instance.ANIM_MoveWithScaleUp(_currentSpawnQues.transform, _standPoint.transform.position);
+            Utilities.Instance.ANIM_MoveWithScaleUp(_currentSpawnQues.transform, _standPoint.transform.position, AssignDisplayTextAudio);
             if(_prevSpawnQues != null)
             {
                 Utilities.Instance.ANIM_MoveWithScaleDown(_prevSpawnQues.transform, _spawnPoint.transform.position, DeleteCompletedObj);
@@ -66,6 +70,13 @@ public class recall : MonoBehaviour
         // _spawnedObjects.Add(spawnedPic);
     }
     // chin, ship, cherry, shell, thorn, wash, push, sheep, bath, watch
+
+    void AssignDisplayTextAudio()
+    {
+        TMP_displayObjName.GetComponent<TextMeshProUGUI>().text = STA_picName[I_Qcount];
+        TMP_displayObjName.GetComponent<AudioSource>().clip = AC_picAudioClip[I_Qcount];
+        TMP_displayObjName.GetComponent<AudioSource>().Play();
+    }
 
     public void BUT_Next()
     {
