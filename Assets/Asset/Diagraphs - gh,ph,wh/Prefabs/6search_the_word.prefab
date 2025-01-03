@@ -63,8 +63,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: aaff354ff4145534ca44f2e1a5014011, type: 3}
   - {fileID: 21300000, guid: 7f8a34937f4705c409873c6da0dd2c9e, type: 3}
   questions:
-  - question: "Doesn\u2019t it get cold at ______ in winters? "
+  - question: 'Doesn''t it get cold at ______ in winters? '
     questionClip: {fileID: 8300000, guid: cc22b09ff2c13c04ea4975874817c6e2, type: 3}
+    answerText: 'Doesn''t it get cold at night in winters? '
     options:
     - option: night
       optionClip: {fileID: 8300000, guid: eb13fee66fac3ff4695458525cf0c0a2, type: 3}
@@ -74,6 +75,7 @@ MonoBehaviour:
       isCorrect: 0
   - question: I had a ______ with my brother yesterday evening.
     questionClip: {fileID: 8300000, guid: 5321228e886bd834495db569a69b731b, type: 3}
+    answerText: I had a fight with my brother yesterday evening.
     options:
     - option: hug
       optionClip: {fileID: 0}
@@ -83,6 +85,7 @@ MonoBehaviour:
       isCorrect: 1
   - question: She has plotted a ______ of all the data.
     questionClip: {fileID: 8300000, guid: e367a3532a1e5cb45a1f607f72a07d4f, type: 3}
+    answerText: She has plotted a graph of all the data.
     options:
     - option: graph
       optionClip: {fileID: 8300000, guid: 03f1b5397a35f9844832a762c6bda8be, type: 3}
@@ -92,6 +95,7 @@ MonoBehaviour:
       isCorrect: 0
   - question: 'Illness affects our ______ and mental health. '
     questionClip: {fileID: 8300000, guid: a639e87eddf6687419ae5a77d695c703, type: 3}
+    answerText: 'Illness affects our physical and mental health. '
     options:
     - option: physical
       optionClip: {fileID: 8300000, guid: 1d40601377814064ea4ca5662d59cc59, type: 3}
@@ -101,6 +105,7 @@ MonoBehaviour:
       isCorrect: 0
   - question: That jute basket is full of ______ roses.
     questionClip: {fileID: 8300000, guid: 355335c7cdc43ea4b827e896c7788af8, type: 3}
+    answerText: That jute basket is full of white roses.
     options:
     - option: who
       optionClip: {fileID: 0}
@@ -110,6 +115,7 @@ MonoBehaviour:
       isCorrect: 1
   - question: '______  is an earthquake? '
     questionClip: {fileID: 8300000, guid: 84f47c5850447b7489efa4cc8b58bf24, type: 3}
+    answerText: 'What is an earthquake? '
     options:
     - option: what
       optionClip: {fileID: 8300000, guid: 6d49615c10bffd94f89a952efb6b5f48, type: 3}
