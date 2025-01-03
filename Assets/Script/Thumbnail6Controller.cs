@@ -68,6 +68,7 @@ public class Thumbnail6Controller : MonoBehaviour
         var rightOption = GetRightOption();
         if(rightOption != null && selectedOptSTR == rightOption.option)
         {
+            questionText.text = currentQuesOpt.answerText;
             DisableInteraction();
             StartCoroutine(PlayAnswerClipAndChangeQues(rightOption));
         }else{
@@ -102,6 +103,7 @@ public class QuestionOptions
 {
     public string question;
     public AudioClip questionClip;
+    public string answerText;
     public TextOption[] options;
 }
 
