@@ -46,7 +46,7 @@ public class Thumbnail5Controller : MonoBehaviour
         foreach (var optionItem in currentQuestionObjs.questionObjects)
         {
             var questionObj = GetPuzzleObj(optionItem.isAnswer);
-            Debug.Log($"Right Puzzle Length :: {puzzleObjs.Count} Wrong Puzzle Length :: {wrongPuzzleObjs.Count}");
+
             var spawnedObj = Instantiate(questionObj, spawnParent.transform);
             spawnedObj.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = optionItem.questionText;
             var dragScript = spawnedObj.GetComponent<ImageDragandDrop>();
