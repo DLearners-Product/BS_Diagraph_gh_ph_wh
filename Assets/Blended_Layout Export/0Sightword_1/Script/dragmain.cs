@@ -38,7 +38,7 @@ public class dragmain : MonoBehaviour
         THI_ShowQuestion();
 
 #region DataSetter
-        Main_Blended.OBJ_main_blended.levelno = 4;
+        // Main_Blended.OBJ_main_blended.levelno = 4;
         QAManager.instance.UpdateActivityQuestion();
         qIndex = 0;
         GetData(I_Qcount);
@@ -138,6 +138,7 @@ public class dragmain : MonoBehaviour
         }
         else
         {
+            BlendedOperations.instance.NotifyActivityCompleted();
             G_final.SetActive(true);
         }
     }
