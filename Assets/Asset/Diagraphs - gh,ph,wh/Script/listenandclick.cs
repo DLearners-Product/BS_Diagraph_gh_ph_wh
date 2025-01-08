@@ -86,6 +86,7 @@ public class listenandclick : MonoBehaviour
         }
         else
         {
+            BlendedOperations.instance.NotifyActivityCompleted();
             G_final.SetActive(true);
         }
     }
@@ -101,7 +102,6 @@ public class listenandclick : MonoBehaviour
         }
         else
         {
-            BlendedOperations.instance.NotifyActivityCompleted();
             G_final.SetActive(true);
         }
     }

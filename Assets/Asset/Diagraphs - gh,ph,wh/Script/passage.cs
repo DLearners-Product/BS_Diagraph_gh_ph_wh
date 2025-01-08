@@ -72,6 +72,7 @@ public class passage : MonoBehaviour
         }
         else
         {
+            BlendedOperations.instance.NotifyActivityCompleted();
             G_final.SetActive(true);
         }
     }
