@@ -26,6 +26,7 @@ public class Thumbnail5Controller : MonoBehaviour
     public Animator transitionAnimation;
     public AnimationClip questionTranOut;
     public AnimationClip questionTranIn;
+    public string[] containTexts;
     Dictionary<string, int> spawnChildIndex = new Dictionary<string, int>();
     List<int> excludeInt = new List<int>(){4,0,8};
     QuesObjArr currentQuestionObjs;
@@ -33,10 +34,30 @@ public class Thumbnail5Controller : MonoBehaviour
     AudioClip AC_currentQuesClip;
     public GameObject activityCompleted;
 
+#region QA
+    private int qIndex;
+    public GameObject questionGO;
+    public GameObject[] optionsGO;
+    public bool isActivityCompleted = false;
+    public Dictionary<string, Component> additionalFields;
+    Component question;
+    Component[] options;
+    Component[] answers;
+#endregion
+
     void Start()
     {
+
+#region DataSetter
+        // Main_Blended.OBJ_main_blended.levelno = 5;
+        QAManager.instance.UpdateActivityQuestion();
+        qIndex = 0;
+        GetAdditionalData();
+#endregion
+
         ChangeQuestion();
         PlayQuestionAudio();
+
     }
 
     void SpawnPuzzleObjects()
@@ -46,13 +67,23 @@ public class Thumbnail5Controller : MonoBehaviour
         foreach (var optionItem in currentQuestionObjs.questionObjects)
         {
             var questionObj = GetPuzzleObj(optionItem.isAnswer);
-            Debug.Log($"Right Puzzle Length :: {puzzleObjs.Count} Wrong Puzzle Length :: {wrongPuzzleObjs.Count}");
+
             var spawnedObj = Instantiate(questionObj, spawnParent.transform);
             spawnedObj.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = optionItem.questionText;
             var dragScript = spawnedObj.GetComponent<ImageDragandDrop>();
             spawnedObj.AddComponent<AudioSource>();
             spawnedObj.GetComponent<AudioSource>().clip = optionItem.optionAudioClip;
             spawnChildIndex.Add(spawnedObj.name, i++);
+        }
+    }
+
+    void RetraceChildObjects()
+    {
+        spawnChildIndex.Clear();
+        int childCount = spawnParent.transform.childCount;
+        for (int i = 0; i < childCount; i++)
+        {
+            spawnChildIndex.Add(spawnParent.transform.GetChild(i).name, i);
         }
     }
 
@@ -109,20 +140,26 @@ public class Thumbnail5Controller : MonoBehaviour
     {
         bool puzzleMathced = dropObj.name.Replace("(Clone)", "").Trim() == dropSlot.name.Trim();
         float clipLen = 0f;
-        // Debug.Log($"Dropped Game Object :: {dropObj.name} DropSlot :: {dropSlot.name}  {puzzleMathced}");
+
         dropSlot.GetComponent<Image>().enabled = true;
         dropSlot.transform.GetChild(1).gameObject.SetActive(false);
-        if(puzzleMathced)
+        string dropObjTxt = dropObj.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text;
+
+        if(dropObjTxt.Contains(containTexts[currentIndex - 1]))
         {
             var puzzleAudio = dropObj.GetComponent<AudioSource>().clip;
             clipLen = puzzleAudio.length;
             AS_audioSource.PlayOneShot(puzzleAudio);
-            dropSlot.GetComponent<Image>().color = Color.white;
-            dropSlot.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = dropObj.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text;
-            // Invoke(, AS_audioSource.clip.length);
+            // dropSlot.GetComponent<Image>().color = Color.white;
+            // dropSlot.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = dropObjTxt;
+            EnableRightObject(dropObj.name.Replace("(Clone)", ""), dropObjTxt);
+
             Destroy(dropObj);
+            ScoreManager.instance.RightAnswer(qIndex++, questionID: question.id, answerID: GetOptionID(dropObjTxt));
             answerCount++;
+            RetraceChildObjects();
         }else{
+            ScoreManager.instance.WrongAnswer(qIndex, questionID: question.id, answerID: GetOptionID(dropObjTxt));
             clipLen = AC_wrongAns.length;
             AS_audioSource.PlayOneShot(AC_wrongAns);
         }
@@ -134,8 +171,21 @@ public class Thumbnail5Controller : MonoBehaviour
         }
     }
 
+    void EnableRightObject(string objectName, string wordSTR)
+    {
+        foreach (var puzzle in puzzleReference)
+        {
+            if(objectName.Trim() == puzzle.name.Trim())
+            {
+                puzzle.GetComponent<Image>().color = Color.white;
+                puzzle.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = wordSTR;
+            }
+        }
+    }
+
     void ChangeQuestion()
     {
+        GetData(currentIndex);
         DeleteSpawnedPuzzleObjs();
         ResetPuzzleComponent();
         InstantiatePuzzleQueue();
@@ -149,6 +199,7 @@ public class Thumbnail5Controller : MonoBehaviour
     {
         if(questionText.Length < (currentIndex + 1))
         {
+            BlendedOperations.instance.NotifyActivityCompleted();
             activityCompleted.SetActive(true);
             return;
         }
@@ -234,6 +285,31 @@ public class Thumbnail5Controller : MonoBehaviour
             Debug.Log($"Child Count :: {spawnParent.transform.childCount}");
         }
     }
+#region QA
+    int GetOptionID(string selectedOption)
+    {
+        for (int i = 0; i < options.Length; i++)
+        {
+            if (options[i].text == selectedOption)
+            {
+                return options[i].id;
+            }
+        }
+        return -1;
+    }
+
+    void GetData(int questionIndex)
+    {
+        question = QAManager.instance.GetQuestionAt(0, questionIndex);
+        options = QAManager.instance.GetOption(0, questionIndex);
+        answers = QAManager.instance.GetAnswer(0, questionIndex);
+    }
+ 
+    void GetAdditionalData()
+    {
+        additionalFields = QAManager.instance.GetAdditionalField(0);
+    }
+#endregion
 }
 
 [System.Serializable]

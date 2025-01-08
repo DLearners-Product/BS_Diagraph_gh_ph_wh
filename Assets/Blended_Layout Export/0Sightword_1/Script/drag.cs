@@ -41,10 +41,10 @@ public class drag : MonoBehaviour, IDragHandler, IEndDragHandler
         {
             if (this.gameObject.name == otherGameObject.name)
             {
-                
+                Debug.Log(this.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text);
                 dragmain.OBJ_dragmain.CLR_Coloor= this.gameObject.GetComponent<Image>().color;
-                dragmain.OBJ_dragmain.STR_Selected = this.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text;
                 dragmain.OBJ_dragmain.AC_Clip = this.gameObject.GetComponent<AudioSource>().clip;
+                dragmain.OBJ_dragmain.STR_Selected = this.gameObject.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text;
                 dragmain.OBJ_dragmain.THI_Correct();
                 this.GetComponent<drag>().enabled = false;
                 Destroy(this.gameObject);
@@ -52,7 +52,7 @@ public class drag : MonoBehaviour, IDragHandler, IEndDragHandler
             else
             {
                // Nextonly.OBJ_Nextonly.THI_Wrong();
-                dragmain.OBJ_dragmain.THI_wrg();
+                dragmain.OBJ_dragmain.THI_wrg(eventData.pointerDrag);
                 this.transform.position = initalPos;
             }
         }else

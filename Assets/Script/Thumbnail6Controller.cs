@@ -20,15 +20,33 @@ public class Thumbnail6Controller : MonoBehaviour
     int currentIndex = 0;
     QuestionOptions currentQuesOpt;
     bool B_interactable = true;
+#region QA
+    private int qIndex;
+    public GameObject questionGO;
+    public GameObject[] optionsGO;
+    public bool isActivityCompleted = false;
+    public Dictionary<string, Component> additionalFields;
+    Component question;
+    Component[] options;
+    Component[] answers;
+#endregion
 
     void Start()
     {
+#region DataSetter
+        // Main_Blended.OBJ_main_blended.levelno = 6;
+        QAManager.instance.UpdateActivityQuestion();
+        qIndex = 0;
+        GetAdditionalData();
+#endregion
         ChangeQues();
     }
 
     void ChangeQues()
     {
-        if(currentIndex == questions.Length) { activityCompleted.SetActive(true); return; }
+        if(currentIndex == questions.Length) { BlendedOperations.instance.NotifyActivityCompleted(); activityCompleted.SetActive(true); return; }
+
+        GetData(currentIndex);
         Utilities.Instance.ANIM_RotateHide(questionImage.transform.parent, ChangeSpriteAndRotate);
         UpdateCounterText();
     }
@@ -68,10 +86,12 @@ public class Thumbnail6Controller : MonoBehaviour
         var rightOption = GetRightOption();
         if(rightOption != null && selectedOptSTR == rightOption.option)
         {
+            ScoreManager.instance.RightAnswer(qIndex++, questionID: question.id, answerID: GetOptionID(selectedOptSTR));
             questionText.text = currentQuesOpt.answerText;
             DisableInteraction();
             StartCoroutine(PlayAnswerClipAndChangeQues(rightOption));
         }else{
+            ScoreManager.instance.WrongAnswer(qIndex, questionID: question.id, answerID: GetOptionID(selectedOptSTR));
             audioSource.PlayOneShot(wrongAnsClip);
         }
     }
@@ -96,6 +116,32 @@ public class Thumbnail6Controller : MonoBehaviour
 
     void EnableInteraction() => B_interactable = true;
     void DisableInteraction() => B_interactable = false;
+
+#region QA
+    int GetOptionID(string selectedOption)
+    {
+        for (int i = 0; i < options.Length; i++)
+        {
+            if (options[i].text == selectedOption)
+            {
+                return options[i].id;
+            }
+        }
+        return -1;
+    }
+
+    void GetData(int questionIndex)
+    {
+        question = QAManager.instance.GetQuestionAt(0, questionIndex);
+        options = QAManager.instance.GetOption(0, questionIndex);
+        answers = QAManager.instance.GetAnswer(0, questionIndex);
+    }
+ 
+    void GetAdditionalData()
+    {
+        additionalFields = QAManager.instance.GetAdditionalField(0);
+    }
+#endregion
 }
 
 [System.Serializable]

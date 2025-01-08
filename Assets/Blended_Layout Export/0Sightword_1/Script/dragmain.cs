@@ -19,12 +19,31 @@ public class dragmain : MonoBehaviour
     public AudioSource AS_emptyAudioSource;
     public TextMeshProUGUI counterText;
 
+#region QA
+    private int qIndex;
+    public GameObject questionGO;
+    public GameObject[] optionsGO;
+    public bool isActivityCompleted = false;
+    public Dictionary<string, Component> additionalFields;
+    Component question;
+    Component[] options;
+    Component[] answers;
+#endregion
+
     public void Start()
     {
         OBJ_dragmain = this;
         I_Qcount = 0;
         G_final.SetActive(false);
         THI_ShowQuestion();
+
+#region DataSetter
+        // Main_Blended.OBJ_main_blended.levelno = 4;
+        QAManager.instance.UpdateActivityQuestion();
+        qIndex = 0;
+        GetData(I_Qcount);
+        GetAdditionalData();
+#endregion
     }
 
     void THI_ShowQuestion()
@@ -45,7 +64,12 @@ public class dragmain : MonoBehaviour
     {
         I_Count++;
         petal = GA_Questions[I_Qcount].transform.GetChild(0).transform.GetChild(0).transform.GetChild(I_Count).gameObject;
-       
+
+        Debug.Log($"Selected Ans :: {STR_Selected}");
+
+        ScoreManager.instance.RightAnswer(qIndex, questionID: question.id, answerID: GetOptionID(STR_Selected));
+        qIndex++;
+
         petal.GetComponent<Image>().color = CLR_Coloor;
         petal.GetComponent<AudioSource>().clip = AC_Clip;
         petal.GetComponent<AudioSource>().Play();
@@ -97,8 +121,10 @@ public class dragmain : MonoBehaviour
         // childObject.PlayOneShot(AC_bubblePop);
     }
 
-    public void THI_wrg()
+    public void THI_wrg(GameObject selectedObj)
     {
+        var selectedOption = selectedObj.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text;
+        ScoreManager.instance.WrongAnswer(qIndex, questionID: question.id, answerID: GetOptionID(selectedOption));
         AS_wrg.Play();
     }
     
@@ -108,10 +134,54 @@ public class dragmain : MonoBehaviour
         {
             I_Qcount++;
             THI_ShowQuestion();
+            GetData(I_Qcount);
         }
         else
         {
+            BlendedOperations.instance.NotifyActivityCompleted();
             G_final.SetActive(true);
         }
     }
+
+#region QA
+    int GetOptionID(string selectedOption)
+    {
+        for (int i = 0; i < options.Length; i++)
+        {
+            if (options[i].text == selectedOption)
+            {
+                return options[i].id;
+            }
+        }
+        return -1;
+    }
+
+    void GetData(int questionIndex)
+    {
+        question = QAManager.instance.GetQuestionAt(0, questionIndex);
+        options = QAManager.instance.GetOption(0, questionIndex);
+        answers = QAManager.instance.GetAnswer(0, questionIndex);
+    }
+ 
+    void GetAdditionalData()
+    {
+        additionalFields = QAManager.instance.GetAdditionalField(0);
+    }
+ 
+    // void AssignData()
+    // {
+    //     // Custom code
+    //     for (int i = 0; i < optionsGO.Length; i++)
+    //     {
+    //         optionsGO[i].GetComponent<Image>().sprite = options[i]._sprite;
+    //         optionsGO[i].tag = "Untagged";
+    //         Debug.Log(optionsGO[i].name, optionsGO[i]);
+    //         // if (CheckOptionIsAns(options[i]))
+    //         // {
+    //         //     optionsGO[i].tag = "answer";
+    //         // }
+    //     }
+    //     // answerCount.text = "/"+answers.Length;
+    // }
+#endregion
 }
