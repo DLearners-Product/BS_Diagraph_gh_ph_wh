@@ -30,7 +30,7 @@ public class passage : MonoBehaviour
         I_Qcount = 0;
         G_final.SetActive(false);
 #region DataSetter
-        Main_Blended.OBJ_main_blended.levelno = 7;
+        // Main_Blended.OBJ_main_blended.levelno = 7;
         QAManager.instance.UpdateActivityQuestion();
         qIndex = 0;
         GetData(I_Qcount);
@@ -142,11 +142,22 @@ public class passage : MonoBehaviour
         AS_passage.Stop();
     }
 
+    void DisableOptions(GameObject parentObject)
+    {
+        int childCount = parentObject.transform.childCount;
+        for (int i = 0; i < childCount; i++)
+        {
+            parentObject.transform.GetChild(i).GetComponent<Button>().interactable = false;
+        }
+    }
+
     IEnumerator PlayRightAudio(GameObject selectedObj)
     {
         yield return new WaitForSeconds(selectedObj.GetComponent<AudioSource>().clip.length);
         AS_Correct.Play();
         selectedObj.transform.GetChild(0).gameObject.GetComponent<Image>().color = Color.green;
+        yield return new WaitForSeconds(1f);
+        DisableOptions(selectedObj.transform.parent.gameObject);
     }
 
     IEnumerator PlayWrongAudio(GameObject selectedObj)
@@ -183,7 +194,7 @@ public class passage : MonoBehaviour
         options = QAManager.instance.GetOption(0, questionIndex);
         answers = QAManager.instance.GetAnswer(0, questionIndex);
     }
- 
+
     void GetAdditionalData()
     {
         additionalFields = QAManager.instance.GetAdditionalField(0);
