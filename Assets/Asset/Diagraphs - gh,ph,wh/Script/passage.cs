@@ -39,7 +39,7 @@ public class passage : MonoBehaviour
         G_final.SetActive(false);
         counterOriginalPosition = counterText.transform.parent.position;
 #region DataSetter
-        Main_Blended.OBJ_main_blended.levelno = 7;
+        // Main_Blended.OBJ_main_blended.levelno = 7;
         QAManager.instance.UpdateActivityQuestion();
         qIndex = 0;
         GetData(I_Qcount);
@@ -51,12 +51,20 @@ public class passage : MonoBehaviour
 
     void THI_ShowQuestion()
     {
-        if(currentIndex >= 1f){
-            nextBTN.GetComponent<Button>().interactable = false;
+        if(currentIndex == 1f){
+            if(selectedAns.Count >= 3)
+                nextBTN.GetComponent<Button>().interactable = true;
+            else
+                nextBTN.GetComponent<Button>().interactable = false;
             backBTN.GetComponent<Button>().interactable = true;
         }else if(currentIndex == 0){
             nextBTN.GetComponent<Button>().interactable = true;
             backBTN.GetComponent<Button>().interactable = false;
+        }else if(currentIndex == 2){
+            if(selectedAns.Count == 6)
+                nextBTN.GetComponent<Button>().interactable = true;
+            else
+                nextBTN.GetComponent<Button>().interactable = false;
         }
 
         Vector3 endPosition = GA_Questions[currentIndex].transform.position + (Vector3.up * 10f);
@@ -80,7 +88,8 @@ public class passage : MonoBehaviour
             }
         }
 
-        if(currentIndex != 1 && distance > 1) return;
+        if(currentIndex != 1 || distance > 1) return;
+        Debug.Log($"currentIndex :: {currentIndex} -- {distance}");
 
         Vector3 endPos = counterText.transform.parent.position + (Vector3.down * 1.5f);
         Utilities.Instance.ANIM_Move(counterText.transform.parent, endPos);
