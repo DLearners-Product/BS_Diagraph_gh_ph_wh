@@ -14,6 +14,14 @@ public class passage : MonoBehaviour
     public AudioSource AS_Correct, AS_Wrong, AS_Empty;
     public AudioSource AS_header, AS_passage;
     int questionIndex = 0;
+    int totalQuestionCount = 6,
+        completedQuestionCount = 0;
+    public TextMeshProUGUI counterText;
+    public GameObject nextBTN;
+    public GameObject backBTN;
+    int currentIndex = 0;
+    List<string> selectedAns = new List<string>();
+    Vector3 counterOriginalPosition;
 #region QA
     private int qIndex;
     public GameObject questionGO;
@@ -29,24 +37,53 @@ public class passage : MonoBehaviour
     {
         I_Qcount = 0;
         G_final.SetActive(false);
+        counterOriginalPosition = counterText.transform.parent.position;
 #region DataSetter
-        // Main_Blended.OBJ_main_blended.levelno = 7;
+        Main_Blended.OBJ_main_blended.levelno = 7;
         QAManager.instance.UpdateActivityQuestion();
         qIndex = 0;
         GetData(I_Qcount);
         GetAdditionalData();
 #endregion
-        THI_ShowQuestion();
+        UpdateCounter();
+        backBTN.GetComponent<Button>().interactable = false;
     }
 
     void THI_ShowQuestion()
     {
-        for (int i = 0; i < GA_Questions.Length; i++)
-        {
-            GA_Questions[i].SetActive(false);
+        if(currentIndex >= 1f){
+            nextBTN.GetComponent<Button>().interactable = false;
+            backBTN.GetComponent<Button>().interactable = true;
+        }else if(currentIndex == 0){
+            nextBTN.GetComponent<Button>().interactable = true;
+            backBTN.GetComponent<Button>().interactable = false;
         }
-        GA_Questions[I_Qcount].SetActive(true);
-        
+
+        Vector3 endPosition = GA_Questions[currentIndex].transform.position + (Vector3.up * 10f);
+        Utilities.Instance.ANIM_Move(GA_Questions[currentIndex].transform, endPosition, 0f,
+        callback : 
+        () => {
+            GA_Questions[currentIndex].SetActive(true);
+            // var _endPosition = GA_Questions[currentIndex].transform.position + (Vector3.down * 10);
+            Utilities.Instance.ANIM_Move(GA_Questions[currentIndex].transform, Vector3.zero, callback: () => { LowerCounter(); });
+        });
+    }
+
+    void LowerCounter()
+    {
+        float distance = Vector3.Distance(counterText.transform.parent.position, counterOriginalPosition);
+        if(currentIndex == 0)
+        {
+            if(distance > 1f)
+            {
+                Utilities.Instance.ANIM_Move(counterText.transform.parent, counterOriginalPosition);
+            }
+        }
+
+        if(currentIndex != 1 && distance > 1) return;
+
+        Vector3 endPos = counterText.transform.parent.position + (Vector3.down * 1.5f);
+        Utilities.Instance.ANIM_Move(counterText.transform.parent, endPos);
     }
 
     public void ReadPassage()
@@ -68,7 +105,8 @@ public class passage : MonoBehaviour
         if (I_Qcount < GA_Questions.Length - 1)
         {
             I_Qcount++;
-            THI_ShowQuestion();
+            // THI_ShowQuestion();
+            MoveCurrentPanel(GA_Questions[currentIndex++]);
         }
         else
         {
@@ -77,13 +115,25 @@ public class passage : MonoBehaviour
         }
     }
 
+    void UpdateCounter()
+    {
+        counterText.text = $"{completedQuestionCount} / {totalQuestionCount}";
+    }
+
+    void MoveCurrentPanel(GameObject currentPanel)
+    {
+        Vector3 endPosition = currentPanel.transform.position + (Vector3.up * 10);
+        Utilities.Instance.ANIM_Move(currentPanel.transform, endPosition, callback: THI_ShowQuestion);
+    }
+
     public void BUT_Back()
     {
         StopPassageVO();
         if (I_Qcount >0)
         {
             I_Qcount--;
-            THI_ShowQuestion();
+            // THI_ShowQuestion();
+            MoveCurrentPanel(GA_Questions[currentIndex--]);
         }
         else
         {
@@ -108,9 +158,17 @@ public class passage : MonoBehaviour
         {
             // AS_Correct.Play();
             // Invoke(nameof(PlayRightAudio), G_Selected.GetComponent<AudioSource>().clip.length);
+
+            if(selectedAns.Contains(selectedOption)) return;
+
             StartCoroutine(PlayRightAudio(G_Selected));
             G_Selected.GetComponent<AudioSource>().Play();
             ScoreManager.instance.RightAnswer(qIndex++, questionID: questions[questionIndex].id, answerID: GetOptionID(selectedOption));
+            selectedAns.Add(selectedOption);
+            completedQuestionCount++;
+            UpdateCounter();
+
+            if((completedQuestionCount % 3) == 0) nextBTN.GetComponent<Button>().interactable = true;
         }
         else
         {

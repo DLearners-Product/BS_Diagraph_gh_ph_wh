@@ -50,9 +50,10 @@ public class Utilities : MonoGenericSingleton<Utilities>
         // obj.GetComponent<Image>().DOFade(1, 0);
     }
 
-    public void ANIM_Move(Transform obj, Vector3 endPos)
+    public void ANIM_Move(Transform obj, Vector3 endPos, float moveTime = 0.5f, TweenCallback callback = null)
     {
-        obj.DOMove(endPos, 0.5f);
+        Tween _tween = obj.DOMove(endPos, moveTime);
+        _tween.onComplete += callback;
     }
 
     public void ANIM_MoveWithScaleUp(Transform obj, Vector3 endPos, TweenCallback onCompleteCallBack=null)
