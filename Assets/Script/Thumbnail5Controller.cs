@@ -27,6 +27,7 @@ public class Thumbnail5Controller : MonoBehaviour
     public AnimationClip questionTranOut;
     public AnimationClip questionTranIn;
     public string[] containTexts;
+    public TextMeshProUGUI counterText;
     Dictionary<string, int> spawnChildIndex = new Dictionary<string, int>();
     List<int> excludeInt = new List<int>(){4,0,8};
     QuesObjArr currentQuestionObjs;
@@ -183,6 +184,11 @@ public class Thumbnail5Controller : MonoBehaviour
         }
     }
 
+    void UpdateCounter()
+    {
+        counterText.text = $"{currentIndex}/{questionText.Length}";
+    }
+
     void ChangeQuestion()
     {
         GetData(currentIndex);
@@ -193,6 +199,7 @@ public class Thumbnail5Controller : MonoBehaviour
         AC_currentQuesClip = questionAudioClips[currentIndex];
         SpawnPuzzleObjects();
         currentIndex++;
+        UpdateCounter();
     }
 
     void NextQuestion()
