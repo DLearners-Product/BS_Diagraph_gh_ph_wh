@@ -8,12 +8,13 @@ using UnityEngine.EventSystems;
 // using UnityEngine.UIElements;
 using UnityEngine.UI;
 
+
 public class Thumbnail10Controller : MonoBehaviour, IPointerClickHandler
 {
     public AudioSource AS_emptyAudioSource;
     public AudioClip AC_passageClip;
     public TextMeshProUGUI passageTMPPro;
-    string[] answerContainStrings = {"gh", "ph", "wh"};
+    string[] answerContainStrings = { "gh", "ph", "wh" };
     public AudioClip[] rightAnswerClips;
     public GameObject nextBtn;
     public GameObject finalScreen;
@@ -21,6 +22,7 @@ public class Thumbnail10Controller : MonoBehaviour, IPointerClickHandler
     int totalyAnswered = 0;
     int allCrctAnsCount = 0;
     List<int> answeredIndexes = new List<int>();
+
 
     void Start()
     {
@@ -35,7 +37,7 @@ public class Thumbnail10Controller : MonoBehaviour, IPointerClickHandler
         string[] passageTextArr = passageText.Split(' ');
         for (int i = 0; i < passageTextArr.Length; i++)
         {
-            if(EvaluateAnswer(passageTextArr[i]))
+            if (EvaluateAnswer(passageTextArr[i]))
             {
                 crctAns++;
             }
@@ -45,7 +47,7 @@ public class Thumbnail10Controller : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if(eventData.button == PointerEventData.InputButton.Left)
+        if (eventData.button == PointerEventData.InputButton.Left)
         {
             var tmPRO = passageTMPPro;
             var wordIndex = TMP_TextUtilities.FindIntersectingWord(tmPRO, Input.mousePosition, Camera.main);
@@ -53,9 +55,9 @@ public class Thumbnail10Controller : MonoBehaviour, IPointerClickHandler
             if (wordIndex != -1)
             {
                 var clickedWord = tmPRO.textInfo.wordInfo[wordIndex].GetWord();
-                if(EvaluateAnswer(clickedWord))
+                if (EvaluateAnswer(clickedWord))
                 {
-                    if(!answeredIndexes.Contains(wordIndex))
+                    if (!answeredIndexes.Contains(wordIndex))
                     {
                         ++totalyAnswered;
                         answeredIndexes.Add(wordIndex);
@@ -64,12 +66,15 @@ public class Thumbnail10Controller : MonoBehaviour, IPointerClickHandler
                     passageTMPPro.text = HighLightAnswer(tmPRO.text, wordIndex);
                     AS_emptyAudioSource.PlayOneShot(GetAudioClip(clickedWord));
                     Debug.Log("Clicked right word " + clickedWord);
-                }else{
+                }
+                else
+                {
                     Debug.Log("Clicked wrong word " + clickedWord);
                 }
             }
 
-            if(totalyAnswered == allCrctAnsCount) {
+            if (totalyAnswered == allCrctAnsCount)
+            {
                 Debug.Log("BUTTON ACTTIVATED.......");
                 nextBtn.GetComponent<Button>().interactable = true;
             }
@@ -80,7 +85,7 @@ public class Thumbnail10Controller : MonoBehaviour, IPointerClickHandler
     {
         foreach (var voClip in rightAnswerClips)
         {
-            if(voClip.name.ToLower().Contains(searchText.ToLower()))
+            if (voClip.name.ToLower().Contains(searchText.ToLower()))
             {
                 Debug.Log($"Search Text {searchText} Name :: {voClip.name} ");
                 return voClip;
@@ -105,11 +110,20 @@ public class Thumbnail10Controller : MonoBehaviour, IPointerClickHandler
     {
         string[] passStrArr = passageSTR.Split(' ');
 
-        if(!passStrArr[ansIndex].Contains("color=yellow"))
+        if (!passStrArr[ansIndex].Contains("color=yellow"))
             passStrArr[ansIndex] = $"<color=yellow>{passStrArr[ansIndex]}</color>";
 
         return String.Join(" ", passStrArr);
     }
+
+
+    public void BUT_Speaker()
+    {
+        AS_emptyAudioSource.Stop();
+        AS_emptyAudioSource.PlayOneShot(AC_passageClip);
+    }
+
+
 
     public void ActivityCompleted()
     {
